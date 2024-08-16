@@ -5,6 +5,8 @@ Created on Fri Aug  9 08:15:17 2024
 REST API to extract institution data from Index Herbarium by date search
 https://sweetgum.nybg.org/science/ih/
 
+Download NCBI collection data and compare to Index Herbarium by collection code. 
+
 @author: mcveigh
 """
 
@@ -60,17 +62,52 @@ if(myResponse.ok):
     #print(new_df.head)
     
     
-    new_df.to_excel('IndexHebarium.xlsx', engine='xlsxwriter', index = False, na_rep = '')  
+    new_df.to_excel('IndexHebarium.xlsx', engine='xlsxwriter', index = False, na_rep = '')
+    #new_df.rename(columns={'code' : 'coll_code'}, inplace=True)
 else:
   # If response code is not ok (200), print the resulting http error code with description
     myResponse.raise_for_status()
     
 #Get NCBI collections data from FTP site. Saves as a file in the working directory
+#Can turn this off if already populated
 import wget
 link = 'https://ftp.ncbi.nih.gov/pub/taxonomy/Ccode_dump.txt'
 wget.download(link)
 
-ncbi_collections_df = pd.read_csv("Ccode_dump.txt", sep='|', index_col=None, low_memory=False, header=None, names=["coll_id", "inst_id", 
-                                "coll_name", "coll_code", "coll_size", "collection_type", "coll_url_rule", "coll_url", "qualifier_type",
-                                "comments"])
-print(ncbi_collections_df.head)
+fin = open("Ccode_dump.txt", "r") 
+fout = open("Ccode_dump2.txt", "w")
+for line in fin:
+   new_line = line.replace('\t', '')
+   fout.write(new_line) 
+fin.close()
+fout.close()
+
+ncbi_collections_df = pd.read_csv("Ccode_dump2.txt", sep='|', index_col=False, low_memory=False, header=0)
+ncbi_collections_df["code"] = ncbi_collections_df["coll_code"]
+ncbi_collections_df["code"] = ncbi_collections_df["code"].str.replace((r'<(.*?)>'), '', regex=True)
+ncbi_collections_df["comments"] = ncbi_collections_df["comments"].apply(lambda x: x.replace("=", "equals "))
+#print(ncbi_collections_df.dtypes)
+ncbi_collections_df.to_excel('NCBIcollection.xlsx', engine='xlsxwriter', index = False, na_rep = '')
+
+combine_df=pd.merge(left=new_df, right=ncbi_collections_df, left_on='code', right_on='code', how = 'outer')
+#print(combine_df.head)
+
+#Missing reports the ones in Index Hebarium that are missing from NCBI
+missing_df = combine_df[combine_df['coll_code'].isnull()]
+missing_df.to_excel('MissingCollections.xlsx', engine='xlsxwriter', index = False, na_rep = '')
+
+
+def highlight_rows(row):
+    ihvalue = row.loc['code']
+    ncbivalue = row.loc['coll_code']
+    if ncbivalue == '':
+        color = '#FFB3BA' # Red        
+    elif ihvalue == ncbivalue:
+        color = '#BAFFC9' # Green
+    else:
+        color = '#ffd343' # Yellow        
+    return ['background-color: {}'.format(color) for r in row]
+
+#Generates a combined output of merged data from IH and NCBI
+new_df = combine_df.style.apply(highlight_rows, axis=1, subset=['code', 'coll_code'])
+new_df.to_excel('Combinedcollection.xlsx', engine='xlsxwriter', index = False, na_rep = '')
