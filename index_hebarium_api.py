@@ -11,14 +11,13 @@ Download NCBI collection data and compare to Index Herbarium by collection code.
 """
 
 import pandas as pd
-import numpy as np
 import requests
 import re
 import json
 from pandas import json_normalize
 import os
 import sys
-import subprocess
+#import subprocess
 import xlsxwriter
 
 import requests
@@ -47,7 +46,7 @@ if(myResponse.ok):
     print("The response contains {0} properties".format(len(jData)))
     print("\n")
     #print(jData)
-    for i in jData['data']:
+    for i in jData['key']:
         #print("Name:", ['contact.webUrl'])
         result.append(i)
     df = json_normalize(result)
