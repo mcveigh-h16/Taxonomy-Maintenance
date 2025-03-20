@@ -28,6 +28,6 @@ dataframe. Outputs to an excel file.
 
 **Mycobankparser.ipynb**
 
-PC based jupyter notebook. Combines and parses data from the API download and the excel file download from Mycobank's web site. Outputs to excel or csv file. NOTE output file will be very large and contain URLs, excel has hard limits on file size and number of URLs in the file which can result in a truncated file. Can you avoid this by outputting as csv file but testing confirmed this resulted in some non-ascii characters being modified. This functionality was added into PDFminer2.ipynb to avoid this file size limitation. 
+PC based jupyter notebook. Combines and parses data from the API download and the excel file download from Mycobank's web site. Outputs to excel or csv file. NOTE output file will be very large and contain URLs, excel has hard limits on file size and number of URLs in the file which can result in a truncated file. Can you avoid this by outputting as csv file but testing confirmed this resulted in some non-ascii characters being modified. This functionality was added into PDFminer2.ipynb to avoid this file size limitation. See https://github.com/mcveigh-h16/PDF-Miner
 
  
