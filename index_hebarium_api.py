@@ -19,10 +19,10 @@ import os
 import sys
 #import subprocess
 import xlsxwriter
-
 import requests
 from requests.auth import HTTPDigestAuth
 import json
+status = True
 
 url = "http://sweetgum.nybg.org/science/api/v1/institutions/search?dateModified=>1/1/2023"
 result = []
@@ -110,3 +110,10 @@ def highlight_rows(row):
 #Generates a combined output of merged data from IH and NCBI
 new_df = combine_df.style.apply(highlight_rows, axis=1, subset=['code', 'coll_code'])
 new_df.to_excel('Combinedcollection.xlsx', engine='xlsxwriter', index = False, na_rep = '')
+
+if status:
+    print("Script executed successfully! Output saved as Combinedcollection.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code

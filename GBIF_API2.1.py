@@ -20,7 +20,7 @@ import re
 import json
 from pandas import json_normalize
 #import os
-#import sys
+import sys
 #import subprocess
 import xlsxwriter
 from requests.auth import HTTPDigestAuth
@@ -30,6 +30,7 @@ data = []
 step= 200
 offset = 0
 endOfRecords = False
+status = True
 
 while not endOfRecords:
     # for gbif data with NCBI identifiers
@@ -79,3 +80,10 @@ ncbi_collection_codes.to_excel('ncbi_collection_codes.xlsx', engine='xlsxwriter'
 combine_df=pd.merge(left=gbifdf, right=ncbi_collection_codes, left_on='code', right_on='coll_name', how = 'outer')
 print(combine_df.head)
 combine_df.to_excel('GBIF_REG_ALL_NCBI_combined.xlsx', engine='xlsxwriter', index = False, na_rep = '', engine_kwargs={'options': {'strings_to_urls': False}})
+
+if status:
+    print("Script executed successfully! Output saved as GBIF_REG_ALL_NCBI_combined.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code

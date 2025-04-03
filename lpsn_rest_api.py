@@ -18,6 +18,8 @@ import os
 import sys
 import subprocess
 import xlsxwriter
+status = True
+
 
 pub_df = pd.DataFrame(columns=['tid', 'monomial', 'species_epithet', 'subspecies_epithet', 'full_name', 'authority', 'category',
                               'proposed_as', 'validly_published', 'is_legitimate', 'nomenclatural_status', 'is_spelling_corrected',
@@ -101,3 +103,9 @@ new_df = combine_df.style.apply(highlight_rows, axis=1, subset=['lpsn_name', 'nc
 #combine_df.to_excel("lpsncombined_output.xlsx") 
 new_df.to_excel('lpsncombinestyle.xlsx', engine='xlsxwriter', index = False, na_rep = '')     
     
+if status:
+    print("Script executed successfully! Output saved as lpsncombinestyle.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code

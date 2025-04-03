@@ -21,6 +21,7 @@ import requests
 from requests.auth import HTTPDigestAuth
 import json
 result = []
+status = True
 
 headers = {"Content-Type": "application/json; charset=utf-8; Accept"}
 
@@ -62,3 +63,10 @@ if(myResponse.ok):
 print(df)
 
 df.to_excel('mycobank.xlsx', engine='xlsxwriter', index = False, na_rep = '', engine_kwargs={'options': {'strings_to_urls': False}})
+
+if status:
+    print("Script executed successfully! Output saved as mycobank.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code

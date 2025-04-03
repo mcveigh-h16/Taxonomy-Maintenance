@@ -22,11 +22,11 @@ import re
 import json
 from pandas import json_normalize
 #import os
-#import sys
+import sys
 #import subprocess
 import xlsxwriter
 from requests.auth import HTTPDigestAuth
-
+status = True
 
 data = []
 step= 200
@@ -51,3 +51,9 @@ print(df)
 
 df.to_excel('GBIF_species.xlsx', engine='xlsxwriter', index = False, na_rep = '', engine_kwargs={'options': {'strings_to_urls': False}})
 
+if status:
+    print("Script executed successfully! Output saved as GBIF_species.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code

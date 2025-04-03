@@ -10,9 +10,6 @@ dataframe.
 @author: mcveigh
 """
 
-# -*- coding: utf-8 -*-
-
-
 import pandas as pd
 import requests
 import re
@@ -27,6 +24,7 @@ import requests
 from requests.auth import HTTPDigestAuth
 import json
 result = []
+status = True
 
 headers = {"Content-Type": "application/json; charset=utf-8; Accept"}
 
@@ -66,3 +64,10 @@ df = json_normalize(result)
 print(df)
 
 df.to_excel('mycobank449.xlsx', engine='xlsxwriter', index = False, na_rep = '', engine_kwargs={'options': {'strings_to_urls': False}})
+
+if status:
+    print("Script executed successfully! Output saved as mycobank449.xlsx")
+    sys.exit(0) # Exit with success code
+else:
+    print("Script failed.")
+    sys.exit(1) # Exit with an error code
