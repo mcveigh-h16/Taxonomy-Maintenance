@@ -30,4 +30,22 @@ dataframe. Outputs to an excel file.
 
 PC based jupyter notebook. Combines and parses data from the API download and the excel file download from Mycobank's web site. Outputs to excel or csv file. NOTE output file will be very large and contain URLs, excel has hard limits on file size and number of URLs in the file which can result in a truncated file. Can you avoid this by outputting as csv file but testing confirmed this resulted in some non-ascii characters being modified. This functionality was added into PDFminer2.ipynb to avoid this file size limitation. See https://github.com/mcveigh-h16/PDF-Miner
 
+**index_hebarium_api.py**
+
+REST API to extract institution data from Index Herbarium by date search. Runs on PC and doesn't require linux.
+https://sweetgum.nybg.org/science/ih/
+
+https://github.com/nybgvh/IH-API/wiki
+
+NCBI collection data from FTP site. This one is the most up to date one since Entrez Biocollections is no longer supported. Institution codes:
+
+https://ftp.ncbi.nih.gov/pub/taxonomy/Ccode_dump.txt
+
+Download NCBI collection data and compare to Index Herbarium by collection code. 
+IH changed the format of the response. I changed for i in jData['key']: to for i in jData['results']:
+
+dependencies
+pandas
+xlsxwriter
+
  
